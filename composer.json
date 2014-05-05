@@ -1,0 +1,12 @@
+{
+	"name": "WP-API/client-cli",
+	"description": "A WP-API client for WP-CLI",
+	"require": {
+		"RequestsPHP/OAuth1": "dev-master",
+	},
+	"autoload": {
+		"files": [
+			"client.php"
+		]
+	}
+}
