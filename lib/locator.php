@@ -3,6 +3,7 @@
 namespace WP_JSON\CLI;
 
 use Requests;
+use Exception;
 
 class Locator {
 	public function __construct() {
