@@ -3,7 +3,7 @@
 	"description": "A WP-API client for WP-CLI",
 	"require": {
 		"wp-api/client": "dev-master",
-		"rmccue/requests": "dev-master",
+		"rmccue/requests": "~1.6",
 		"justinrainbow/json-schema": "dev-master"
-		}
+	}
 }
