@@ -79,12 +79,20 @@ class Authentication extends WP_CLI_Command {
 			}
 
 			// Direct the user to authorize
-			WP_CLI::line( "Open in your browser: %s", $authorization );
+			WP_CLI::line( sprintf( "Open in your browser: %s", $authorization ) );
 			echo "Enter the verification code: ";
 			$code = trim( fgets( STDIN ) );
 
 			// Convert request token to access token
-			// $response = $session->post()
+			$response = $auth->get_access_token( $session, $index_data->authentication->oauth1->access, $code );
+			parse_str( $response->body, $token_args );
+
+			$token = new OAuthToken( $token_args['oauth_token'], $token_args['oauth_token_secret'] );
+			$auth->set_token( $token );
+
+			WP_CLI::line( "Authorized!" );
+			WP_CLI::line( sprintf( "Key: %s", $token_args['oauth_token'] ) );
+			WP_CLI::line( sprintf( "Secret: %s", $token_args['oauth_token_secret'] ) );
 		}
 		catch ( Exception $e ) {
 			WP_CLI::error( $e->getMessage() );
