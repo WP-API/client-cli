@@ -42,9 +42,9 @@ class Requests_Auth_OAuth1 implements Requests_Auth {
 		return $response;
 	}
 
-	public function get_access_token( $session, $path = '' ) {
+	public function get_access_token( $session, $path = '', $verifier = '' ) {
 		$request_session = clone $session;
-		$response = $request_session->post( $path );
+		$response = $request_session->post( $path, array(), array( 'oauth_verifier' => $verifier ) );
 
 		return $response;
 	}
