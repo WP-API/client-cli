@@ -1,10 +1,9 @@
 {
 	"name": "WP-API/client-cli",
 	"description": "A WP-API client for WP-CLI",
-	"require": {},
-	"autoload": {
-		"files": [
-			"client.php"
-		]
-	}
+	"require": {
+		"wp-api/client": "dev-master",
+		"rmccue/requests": "dev-master",
+		"justinrainbow/json-schema": "dev-master"
+		}
 }

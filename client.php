@@ -14,6 +14,8 @@ if ( ! defined( 'WP_CLI' ) ) {
 require_once __DIR__ . '/requestsoauth/requests.php';
 require_once __DIR__ . '/requestsoauth/oauth.php';
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 function autoload( $class ) {
 	if ( strpos( $class, __NAMESPACE__ ) !== 0 ) {
 		return;
