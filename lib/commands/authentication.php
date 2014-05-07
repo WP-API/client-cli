@@ -79,7 +79,7 @@ class Authentication extends WP_CLI_Command {
 			}
 
 			// Direct the user to authorize
-			WP_CLI::line( "Open in your browser: %s", $authorization );
+			WP_CLI::line( sprintf( "Open in your browser: %s", $authorization ) );
 			echo "Enter the verification code: ";
 			$code = trim( fgets( STDIN ) );
 
