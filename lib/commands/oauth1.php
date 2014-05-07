@@ -46,9 +46,7 @@ class OAuth1 extends WP_CLI_Command {
 			$locator = new Locator();
 			$url = $locator->locate( $args[0] );
 
-			$session = new Requests_Session( $url . '/', array(), array(), array(
-				'auth' => $auth,
-			) );
+			$session = new Requests_Session( $url . '/' );
 
 			$index = $session->get( '' );
 			$index_data = json_decode( $index->body );
@@ -56,6 +54,9 @@ class OAuth1 extends WP_CLI_Command {
 			if ( empty( $index_data->authentication ) || empty( $index_data->authentication->oauth1 ) ) {
 				throw new Exception( "Could not locate OAuth information; are you sure it's enabled?" );
 			}
+
+			// Add authenticator
+			$session->auth = $auth;
 
 			// Retrieve the request token
 			$response = $auth->get_request_token( $session, $index_data->authentication->oauth1->request );
