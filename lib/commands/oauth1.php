@@ -13,7 +13,7 @@ use WP_CLI;
 use WP_CLI_Command;
 use WP_JSON\CLI\Locator;
 
-class Authentication extends WP_CLI_Command {
+class OAuth1 extends WP_CLI_Command {
 	/**
 	 * ## OPTIONS
 	 *
