@@ -40,9 +40,9 @@ To create the consumer, run the following **on your server**:
 ```bash
 $ wp oauth1 add
 
-# ID: 4
-# Key: sDc51JgH2mFu
-# Secret: LnUdIsyhPFnURkatekRIAUfYV7nmP4iF3AVxkS5PRHPXxgOW
+ID: 4
+Key: sDc51JgH2mFu
+Secret: LnUdIsyhPFnURkatekRIAUfYV7nmP4iF3AVxkS5PRHPXxgOW
 ```
 
 Note the key and secret returned here. You'll need those in a moment.
