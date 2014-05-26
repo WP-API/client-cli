@@ -109,9 +109,27 @@ class OAuth1 extends WP_CLI_Command {
 	}
 
 	/**
+	 * ## OPTIONS
+	 *
+	 * <url>
+	 * : URL for the WordPress site
+	 *
 	 * @when before_wp_load
 	 */
-	public function disconnect() {
-		// ...
+	public function disconnect( $args ) {
+		try {
+			// Find the API
+			$locator = new Locator();
+			$url = $locator->locate( $args[0] );
+			if ( ! Authenticator::delete_for_site( $url ) ) {
+				WP_CLI::error( "Could not disconnect client" );
+			}
+			else {
+				WP_CLI::success( sprintf( 'Disconnected from %s', $url ) );
+			}
+		}
+		catch ( Exception $e ) {
+			WP_CLI::error( $e->getMessage() );
+		}
 	}
 }
