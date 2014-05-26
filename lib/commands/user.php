@@ -40,6 +40,38 @@ class User extends Base {
 	}
 
 	/**
+	 * List all user's capabilites.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <url>
+	 * : URL for the WordPress site
+	 *
+	 * <id>
+	 * : User ID.
+	 *
+	 * @subcommand list-caps
+	 * @when before_wp_load
+	 */
+	public function list_caps( $args, $assoc_args ) {
+		try {
+			$api = $this->get_connection( $args[0] );
+			$data = $api->users->get( $args[1] );
+
+			foreach ( $data->capabilities as $cap => $status ) {
+				if ( ! $status ) {
+					continue;
+				}
+
+				WP_CLI::line( $cap );
+			}
+		}
+		catch ( Exception $e ) {
+			WP_CLI::error( $e->getMessage() );
+		}
+	}
+
+	/**
 	 * ## OPTIONS
 	 *
 	 * <url>
