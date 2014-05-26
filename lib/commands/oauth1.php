@@ -11,6 +11,7 @@ use Requests_Auth_OAuth1;
 use Requests_Session;
 use WP_CLI;
 use WP_CLI_Command;
+use WP_JSON\CLI\Authenticator;
 use WP_JSON\CLI\Locator;
 
 class OAuth1 extends WP_CLI_Command {
@@ -28,6 +29,9 @@ class OAuth1 extends WP_CLI_Command {
 	 *
 	 * [--scope=<scope>]
 	 * : Scopes to request
+	 *
+	 * [--no-cache]
+	 * : Don't save key/secret into authentication cache
 	 *
 	 * @when before_wp_load
 	 */
@@ -91,6 +95,10 @@ class OAuth1 extends WP_CLI_Command {
 			$token = new OAuthToken( $token_args['oauth_token'], $token_args['oauth_token_secret'] );
 			$auth->set_token( $token );
 
+			if ( empty( $assoc_args['no-cache'] ) ) {
+				Authenticator::save_for_site( $url, $auth );
+			}
+
 			WP_CLI::line( "Authorized!" );
 			WP_CLI::line( sprintf( "Key: %s", $token_args['oauth_token'] ) );
 			WP_CLI::line( sprintf( "Secret: %s", $token_args['oauth_token_secret'] ) );
@@ -101,9 +109,56 @@ class OAuth1 extends WP_CLI_Command {
 	}
 
 	/**
+	 * ## OPTIONS
+	 *
+	 * <url>
+	 * : URL for the WordPress site
+	 *
 	 * @when before_wp_load
 	 */
-	public function disconnect() {
-		// ...
+	public function status( $args ) {
+		$locator = new Locator();
+		try {
+			$url = $locator->locate( $args[0] );
+			$auth = Authenticator::get_for_site( $url );
+			if ( empty( $auth ) ) {
+				WP_CLI::error( sprintf( 'No authentication found for %s', $url ) );
+			}
+
+			$token = $auth->get_token();
+			$consumer = $auth->get_consumer();
+			WP_CLI::line( sprintf( 'Consumer key: %s', $consumer->key ) );
+			WP_CLI::line( sprintf( 'Consumer secret: %s', $consumer->secret ) );
+			WP_CLI::line( sprintf( 'Token key: %s', $token->key ) );
+			WP_CLI::line( sprintf( 'Token secret: %s', $token->secret ) );
+		}
+		catch ( Exception $e ) {
+			WP_CLI::error( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * ## OPTIONS
+	 *
+	 * <url>
+	 * : URL for the WordPress site
+	 *
+	 * @when before_wp_load
+	 */
+	public function disconnect( $args ) {
+		try {
+			// Find the API
+			$locator = new Locator();
+			$url = $locator->locate( $args[0] );
+			if ( ! Authenticator::delete_for_site( $url ) ) {
+				WP_CLI::error( "Could not disconnect client" );
+			}
+			else {
+				WP_CLI::success( sprintf( 'Disconnected from %s', $url ) );
+			}
+		}
+		catch ( Exception $e ) {
+			WP_CLI::error( $e->getMessage() );
+		}
 	}
 }
