@@ -6,6 +6,7 @@ use Exception;
 use WPAPI;
 use WP_CLI;
 use WP_CLI_Command;
+use WP_CLI\Formatter;
 use WP_JSON\CLI\Authenticator;
 use WP_JSON\CLI\Locator;
 
