@@ -36,26 +36,7 @@ class User extends Base {
 		$api = $this->get_connection( $args[0] );
 		$users = $api->users->getAll();
 
-		if ( $assoc_args['format'] !== 'json' ) {
-			$users = \WP_CLI\Utils\iterator_map( $users, function( $user ) {
-				$data = $user->getRawData();
-
-				unset( $data['meta'] );
-				$data['roles'] = implode( ',', $data['roles'] );
-
-				if ( ! empty( $data['capabilities'] ) ) {
-					$data['capabilities'] = array_filter( $data['capabilities'] );
-					$data['capabilities'] = implode( ',', array_keys( $data['capabilities'] ) );
-				}
-				return $data;
-			} );
-		}
-
-		$this->obj_fields = array( 'ID', 'username', 'name', 'email', 'roles' );
-
-		$formatter = $this->get_formatter( $assoc_args );
-		$formatter->display_items( $users );
-
+		$this->display_items( $users, $assoc_args );
 	}
 
 	/**
@@ -75,31 +56,47 @@ class User extends Base {
 			$api = $this->get_connection( $args[0] );
 			$data = $api->users->getCurrent();
 
-			if ( empty( $assoc_args['format'] ) ) {
-				$assoc_args['format'] = 'table';
-			}
-
-			$fields = array( 'ID', 'username', 'name', 'email', 'roles' );
-
-			if ( $assoc_args['format'] !== 'json' ) {
-				$data = \WP_CLI\Utils\iterator_map( array( $data ), function( $user ) {
-					$data = $user->getRawData();
-
-					unset( $data['meta'] );
-					$data['roles'] = implode( ',', $data['roles'] );
-
-					if ( ! empty( $data['capabilities'] ) ) {
-						$data['capabilities'] = array_filter( $data['capabilities'] );
-						$data['capabilities'] = implode( ',', $data['capabilities'] );
-					}
-					return $data;
-				} );
-			}
-
-			\WP_CLI\Utils\format_items( $assoc_args['format'], $data, $fields );
+			$this->display_items( array( $data ), $assoc_args );
 		}
 		catch ( Exception $e ) {
 			WP_CLI::error( $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Display items via the formatter
+	 *
+	 * @param array $items
+	 * @param array $assoc_args
+	 */
+	protected function display_items( $items, $assoc_args ) {
+		if ( empty( $assoc_args['format'] ) ) {
+			$assoc_args['format'] = 'table';
+		}
+
+		if ( $assoc_args['format'] !== 'json' ) {
+			$items = \WP_CLI\Utils\iterator_map( $items, function( $user ) {
+				$data = $user->getRawData();
+
+				unset( $data['meta'] );
+				$data['roles'] = implode( ',', $data['roles'] );
+
+				if ( ! empty( $data['capabilities'] ) ) {
+					$data['capabilities'] = array_filter( $data['capabilities'] );
+					$data['capabilities'] = implode( ',', array_keys( $data['capabilities'] ) );
+				}
+				return $data;
+			} );
+		}
+		else {
+			$items = \WP_CLI\Utils\iterator_map( $items, function( $user ) {
+				return $user->getRawData();
+			} );
+		}
+
+		$this->obj_fields = array( 'ID', 'username', 'name', 'email', 'roles' );
+
+		$formatter = $this->get_formatter( $assoc_args );
+		$formatter->display_items( $items );
 	}
 }
