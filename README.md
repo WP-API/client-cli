@@ -15,10 +15,22 @@ On the server:
 On the client:
 * [WP-CLI][]
 * This repository!
+* [Composer][] (you'll already have this if you have WP-CLI)
 
 [OAuth 1.0a Server]: https://github.com/WP-API/OAuth1
+[Composer]: http://getcomposer.org/
 
 ## Setting Up
+### Step 0: Downloading
+After you've cloned this repository down, you'll need to make sure you install
+the dependencies:
+```bash
+$ composer install
+```
+
+(If you're using WP-CLI's copy of Composer, use
+`~/.wp-cli/composer.phar install` instead.)
+
 ### Step 1: Creating a Consumer
 Once you have WP API and the OAuth server plugins activated on your server,
 you'll need to create a "consumer". This is an identifier for the application,
