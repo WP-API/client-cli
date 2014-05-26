@@ -4,14 +4,21 @@ namespace WP_JSON\CLI;
 
 use Requests;
 use Exception;
+use WP_CLI;
 
 class Locator {
 	public function __construct() {
 	}
 
-	public function locate( $url ) {
+	public function locate( $raw, $use_cache = true ) {
+		// Attempt to use the cache
+		$cached = $this->get_cached( $raw );
+		if ( ! empty( $cached ) ) {
+			return $cached;
+		}
+
 		// First, locate the API
-		$page = Requests::head( $url );
+		$page = Requests::head( $raw );
 		$links = $page->headers['Link'];
 		if ( empty( $links ) ) {
 			throw new Exception( "Could not locate API; are you sure it's enabled?" );
@@ -28,7 +35,31 @@ class Locator {
 			throw new Exception( "Could not locate API; are you sure it's enabled?" );
 		}
 
+		if ( $use_cache ) {
+			$this->set_cached( $raw, $url );
+		}
+
 		return $url;
+	}
+
+	protected function get_cached( $raw ) {
+		$cache = WP_CLI::get_cache();
+		$cache_key = 'api/location-' . sha1( $raw );
+		if ( ! $cache->has( $cache_key, 0 ) ) {
+			return null;
+		}
+
+		$contents = $cache->read( $cache_key, 0 );
+		if ( empty( $contents ) ) {
+			return null;
+		}
+		return $contents;
+	}
+
+	protected function set_cached( $raw, $located ) {
+		$cache = WP_CLI::get_cache();
+		$cache_key = 'api/location-' . sha1( $raw );
+		return $cache->write( $cache_key, $located );
 	}
 
 	protected function parse_links( $links ) {
