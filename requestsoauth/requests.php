@@ -40,7 +40,11 @@ class Requests_Auth_OAuth1 implements Requests_Auth {
 		$request = OAuthRequest::from_consumer_and_token($this->consumer, $this->token, $options['type'], $url, $data);
 		$request->sign_request($this->signature_method, $this->consumer, $this->token);
 
-		$headers['Authorization'] = $request->to_header();
+		$header = $request->to_header();
+
+		// Strip leading 'Authorization:'
+		$header = trim( substr( $header, 14 ) );
+		$headers['Authorization'] = trim( $header, ' ' );
 	}
 
 	public function get_request_token( $session, $path = '', $callback = 'oob' ) {
