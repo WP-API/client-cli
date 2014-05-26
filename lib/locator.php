@@ -7,6 +7,8 @@ use Exception;
 use WP_CLI;
 
 class Locator {
+	public $expiration = 3600;
+
 	public function __construct() {
 	}
 
@@ -45,11 +47,11 @@ class Locator {
 	protected function get_cached( $raw ) {
 		$cache = WP_CLI::get_cache();
 		$cache_key = 'api/location-' . sha1( $raw );
-		if ( ! $cache->has( $cache_key, 0 ) ) {
+		if ( ! $cache->has( $cache_key, $this->expiration ) ) {
 			return null;
 		}
 
-		$contents = $cache->read( $cache_key, 0 );
+		$contents = $cache->read( $cache_key, $this->expiration );
 		if ( empty( $contents ) ) {
 			return null;
 		}
