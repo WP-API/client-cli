@@ -72,11 +72,8 @@ class User extends Base {
 	 */
 	public function get_current( $args, $assoc_args ) {
 		try {
-			$api = $this->get_connection();
-			$response = $api->get( '/users/me' );
-			$response->throw_for_status();
-
-			$data = json_decode( $response->body, true );
+			$api = $this->get_connection( $args[0] );
+			$data = $api->users->getCurrent();
 
 			if ( empty( $assoc_args['format'] ) ) {
 				$assoc_args['format'] = 'table';
@@ -86,14 +83,16 @@ class User extends Base {
 
 			if ( $assoc_args['format'] !== 'json' ) {
 				$data = \WP_CLI\Utils\iterator_map( array( $data ), function( $user ) {
-					unset( $user['meta'] );
-					$user['roles'] = implode( ',', $user['roles'] );
+					$data = $user->getRawData();
 
-					if ( ! empty( $user['capabilities'] ) ) {
-						$user['capabilities'] = array_filter( $user['capabilities'] );
-						$user['capabilities'] = implode( ',', $user['capabilities'] );
+					unset( $data['meta'] );
+					$data['roles'] = implode( ',', $data['roles'] );
+
+					if ( ! empty( $data['capabilities'] ) ) {
+						$data['capabilities'] = array_filter( $data['capabilities'] );
+						$data['capabilities'] = implode( ',', $data['capabilities'] );
 					}
-					return $user;
+					return $data;
 				} );
 			}
 
