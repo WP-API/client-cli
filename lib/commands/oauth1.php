@@ -11,6 +11,7 @@ use Requests_Auth_OAuth1;
 use Requests_Session;
 use WP_CLI;
 use WP_CLI_Command;
+use WP_JSON\CLI\Authenticator;
 use WP_JSON\CLI\Locator;
 
 class OAuth1 extends WP_CLI_Command {
@@ -28,6 +29,9 @@ class OAuth1 extends WP_CLI_Command {
 	 *
 	 * [--scope=<scope>]
 	 * : Scopes to request
+	 *
+	 * [--no-cache]
+	 * : Don't save key/secret into authentication cache
 	 *
 	 * @when before_wp_load
 	 */
@@ -90,6 +94,10 @@ class OAuth1 extends WP_CLI_Command {
 
 			$token = new OAuthToken( $token_args['oauth_token'], $token_args['oauth_token_secret'] );
 			$auth->set_token( $token );
+
+			if ( empty( $assoc_args['no-cache'] ) ) {
+				Authenticator::save_for_site( $url, $auth );
+			}
 
 			WP_CLI::line( "Authorized!" );
 			WP_CLI::line( sprintf( "Key: %s", $token_args['oauth_token'] ) );
