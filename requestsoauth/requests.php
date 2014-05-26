@@ -50,6 +50,7 @@ class Requests_Auth_OAuth1 implements Requests_Auth {
 	public function get_request_token( $session, $path = '', $callback = 'oob' ) {
 		$request_session = clone $session;
 		$response = $request_session->post( $path );
+		$response->throw_for_status();
 
 		return $response;
 	}
@@ -57,6 +58,7 @@ class Requests_Auth_OAuth1 implements Requests_Auth {
 	public function get_access_token( $session, $path = '', $verifier = '' ) {
 		$request_session = clone $session;
 		$response = $request_session->post( $path, array(), array( 'oauth_verifier' => $verifier ) );
+		$response->throw_for_status();
 
 		return $response;
 	}
