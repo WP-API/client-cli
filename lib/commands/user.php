@@ -4,21 +4,9 @@ namespace WP_JSON\CLI\Commands;
 
 use Exception;
 use WP_CLI;
-use WP_CLI_Command;
 
 /**
  * Manage users through WP-API.
- *
- * ## OPTIONS
- *
- * --url=<url>
- * : Base URL for the requests
- *
- * [--username=<username>]
- * : Username to make the requests under (basic auth).
- *
- * [--password=<password>]
- * : Password to make the requests under (basic auth).
  *
  * @when before_wp_load
  */
