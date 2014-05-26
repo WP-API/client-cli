@@ -29,6 +29,9 @@ class User extends Base {
 	 *
 	 * ## OPTIONS
 	 *
+	 * <url>
+	 * : URL for the WordPress site
+	 *
 	 * [--field=<field>]
 	 * : Prints the value of a single field for each user.
 	 *
@@ -42,7 +45,7 @@ class User extends Base {
 	 */
 	public function list_( $args, $assoc_args ) {
 
-		$connection = $this->get_connection( $assoc_args );
+		$connection = $this->get_connection( $args[0] );
 		$users = new \WPAPI\Users( $connection );
 
 		$formatter = $this->get_formatter( $assoc_args );
