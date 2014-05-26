@@ -72,6 +72,8 @@ class User extends Base {
 	}
 
 	/**
+	 * Get a single user.
+	 *
 	 * ## OPTIONS
 	 *
 	 * <url>
@@ -98,6 +100,8 @@ class User extends Base {
 	}
 
 	/**
+	 * Get the current user.
+	 *
 	 * ## OPTIONS
 	 *
 	 * <url>
