@@ -37,7 +37,7 @@ class Requests_Auth_OAuth1 implements Requests_Auth {
 	}
 
 	public function add_headers(&$url, &$headers, &$data, &$type, &$options) {
-		$request = OAuthRequest::from_consumer_and_token($this->consumer, $this->token, $type, $url, $data);
+		$request = OAuthRequest::from_consumer_and_token($this->consumer, $this->token, $options['type'], $url, $data);
 		$request->sign_request($this->signature_method, $this->consumer, $this->token);
 
 		$headers['Authorization'] = $request->to_header();
