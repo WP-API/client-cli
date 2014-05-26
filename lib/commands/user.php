@@ -45,6 +45,32 @@ class User extends Base {
 	 * <url>
 	 * : URL for the WordPress site
 	 *
+	 * <id>
+	 * : User ID
+	 *
+	 * [--format=<format>]
+	 * : Output format ('table', 'json', 'csv', 'ids', 'count')
+	 *
+	 * @when before_wp_load
+	 */
+	public function get( $args, $assoc_args ) {
+		try {
+			$api = $this->get_connection( $args[0] );
+			$data = $api->users->get( $args[1] );
+
+			$this->display_items( array( $data ), $assoc_args );
+		}
+		catch ( Exception $e ) {
+			WP_CLI::error( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * ## OPTIONS
+	 *
+	 * <url>
+	 * : URL for the WordPress site
+	 *
 	 * [--format=<format>]
 	 * : Output format ('table', 'json', 'csv', 'ids', 'count')
 	 *
