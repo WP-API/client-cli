@@ -20,8 +20,16 @@ class Requests_Auth_OAuth1 implements Requests_Auth {
 		}
 	}
 
+	public function get_token() {
+		return $this->token;
+	}
+
 	public function set_token(OAuthToken $token = null) {
 		$this->token = $token;
+	}
+
+	public function get_consumer() {
+		return $this->consumer;
 	}
 
 	public function register(Requests_Hooks &$hooks) {

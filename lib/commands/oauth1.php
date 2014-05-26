@@ -116,6 +116,35 @@ class OAuth1 extends WP_CLI_Command {
 	 *
 	 * @when before_wp_load
 	 */
+	public function status( $args ) {
+		$locator = new Locator();
+		try {
+			$url = $locator->locate( $args[0] );
+			$auth = Authenticator::get_for_site( $url );
+			if ( empty( $auth ) ) {
+				WP_CLI::error( sprintf( 'No authentication found for %s', $url ) );
+			}
+
+			$token = $auth->get_token();
+			$consumer = $auth->get_consumer();
+			WP_CLI::line( sprintf( 'Consumer key: %s', $consumer->key ) );
+			WP_CLI::line( sprintf( 'Consumer secret: %s', $consumer->secret ) );
+			WP_CLI::line( sprintf( 'Token key: %s', $token->key ) );
+			WP_CLI::line( sprintf( 'Token secret: %s', $token->secret ) );
+		}
+		catch ( Exception $e ) {
+			WP_CLI::error( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * ## OPTIONS
+	 *
+	 * <url>
+	 * : URL for the WordPress site
+	 *
+	 * @when before_wp_load
+	 */
 	public function disconnect( $args ) {
 		try {
 			// Find the API
