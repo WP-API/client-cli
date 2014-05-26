@@ -33,8 +33,25 @@ class User extends Base {
 	 */
 	public function list_( $args, $assoc_args ) {
 
-		$connection = $this->get_connection( $args[0] );
-		$users = new \WPAPI\Users( $connection );
+		$api = $this->get_connection( $args[0] );
+		$users = $api->users->getAll();
+
+		if ( $assoc_args['format'] !== 'json' ) {
+			$users = \WP_CLI\Utils\iterator_map( $users, function( $user ) {
+				$data = $user->getRawData();
+
+				unset( $data['meta'] );
+				$data['roles'] = implode( ',', $data['roles'] );
+
+				if ( ! empty( $data['capabilities'] ) ) {
+					$data['capabilities'] = array_filter( $data['capabilities'] );
+					$data['capabilities'] = implode( ',', array_keys( $data['capabilities'] ) );
+				}
+				return $data;
+			} );
+		}
+
+		$this->obj_fields = array( 'ID', 'username', 'name', 'email', 'roles' );
 
 		$formatter = $this->get_formatter( $assoc_args );
 		$formatter->display_items( $users );
