@@ -30,6 +30,7 @@ class User extends Base {
 	 * : Accepted values: table, csv, json, count. Default: table
 	 *
 	 * @subcommand list
+	 * @when before_wp_load
 	 */
 	public function list_( $args, $assoc_args ) {
 
