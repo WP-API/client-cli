@@ -34,3 +34,4 @@ function autoload( $class ) {
 
 spl_autoload_register( __NAMESPACE__ . '\\autoload' );
 WP_CLI::add_command( 'api oauth1', __NAMESPACE__ . '\\Commands\\OAuth1' );
+WP_CLI::add_command( 'api user', __NAMESPACE__ . '\\Commands\\User' );
