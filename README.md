@@ -65,7 +65,7 @@ Enter the verification code:
 
 Open this up in your browser, log in if needed, and authorize the account.
 You'll then see an authorization code:
-![Authorization code](https://www.dropbox.com/s/nj5b4kixzpj1wwp/Screenshot%202014-05-27%2000.00.10.png)
+![Authorization code](https://photos-5.dropbox.com/t/2/AADPpJ4_exu65e_pj05DloDl-DvPkYdUsxnjizls3lb_9A/12/35822/png/1024x768/3/1430881200/0/2/Screenshot%202014-05-27%2000.00.10.png/CO6XAiABIAIgAyAEIAUoASgC/i8DdD0hlhLWSCBLjgrpUASZv9CZ1tzeNB3KsFyE09Xs)
 
 Copy and paste this into your terminal, hit enter and you're good to go:
 ```bash
