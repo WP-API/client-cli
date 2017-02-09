@@ -27,7 +27,7 @@ class Locator {
 		}
 		$links = $this->parse_links( $links );
 		foreach ( $links as $link ) {
-			if ( empty( $link['rel'] ) || $link['rel'] !== 'https://github.com/WP-API/WP-API' ) {
+			if ( empty( $link['rel'] ) || $link['rel'] !== 'https://api.w.org/' ) {
 				continue;
 			}
 
